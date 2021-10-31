@@ -4,6 +4,7 @@ import com.github.lyrric.conf.Config;
 import com.github.lyrric.model.BusinessException;
 import com.github.lyrric.model.VaccineList;
 import com.github.lyrric.ui.MainFrame;
+import com.github.lyrric.ui.miaoMiaoTab;
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +41,7 @@ public class SecKillService {
      * 多线程秒杀开启
      */
     @SuppressWarnings("AlibabaAvoidManuallyCreateThread")
-    public void startSecKill(Integer vaccineId, String startDateStr, MainFrame mainFrame) throws ParseException, InterruptedException {
+    public void startSecKill(Integer vaccineId, String startDateStr, miaoMiaoTab miaoMiaoTab) throws ParseException, InterruptedException {
         long startDate = convertDateToInt(startDateStr);
 
         long now = System.currentTimeMillis();
@@ -81,27 +82,31 @@ public class SecKillService {
         try {
             service.awaitTermination(Long.MAX_VALUE, TimeUnit.SECONDS);
             if (Config.success) {
-                if (mainFrame != null) {
-                    mainFrame.appendMsg("抢购成功，请登录约苗小程序查看");
+                if (miaoMiaoTab != null) {
+                    miaoMiaoTab.appendMsg("抢购成功，请登录约苗小程序查看");
                 }
                 logger.info("抢购成功，请登录约苗小程序查看");
             } else {
-                if (mainFrame != null) {
-                    mainFrame.appendMsg("抢购失败");
+                if (miaoMiaoTab != null) {
+                    miaoMiaoTab.appendMsg("抢购失败");
                 }
                 logger.info("抢购失败");
             }
         }catch (Exception e){
             e.printStackTrace();
         }finally {
-            if (mainFrame != null) {
-                mainFrame.setStartBtnEnable();
+            if (miaoMiaoTab != null) {
+                miaoMiaoTab.setStartBtnEnable();
             }
         }
 
     }
     public List<VaccineList> getVaccines() throws IOException, BusinessException {
         return httpService.getVaccineList();
+    }
+
+    public List<VaccineList> getYMVaccines() throws IOException, BusinessException {
+        return httpService.getYMVaccineList();
     }
     /**
      *  将时间字符串转换为时间戳

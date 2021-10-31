@@ -25,6 +25,7 @@ public class ConfigDialog extends JDialog {
 
     boolean success = false;
     public ConfigDialog(Frame owner) {
+//        JComponent a = (JComponent) owner.getParent().getParent().getParent().getParent();
         super(owner, true);
         this.owner = owner;
         init();

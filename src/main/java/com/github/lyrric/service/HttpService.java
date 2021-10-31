@@ -35,6 +35,10 @@ public class HttpService {
 
     private String baseUrl = "https://miaomiao.scmttec.com";
 
+    private String ymBaseUrl = "https://wx.scmttec.com";
+
+    private Map<String, String> params = new HashMap<>();
+
     private final Logger logger = LogManager.getLogger(HttpService.class);
 
 
@@ -50,7 +54,7 @@ public class HttpService {
      */
     public String secKill(String seckillId, String vaccineIndex, String linkmanId, String idCard, String st) throws IOException, BusinessException {
         String path = baseUrl+"/seckill/seckill/subscribe.do";
-        Map<String, String> params = new HashMap<>();
+//        Map<String, String> params = new HashMap<>();
         params.put("seckillId", seckillId);
         params.put("vaccineIndex", vaccineIndex);
         params.put("linkmanId", linkmanId);
@@ -58,6 +62,19 @@ public class HttpService {
         //加密参数
         Header header = new BasicHeader("ecc-hs", eccHs(seckillId, st));
         return get(path, params, header);
+    }
+
+    public List<VaccineList> getYMVaccineList() throws BusinessException, IOException{
+        hasAvailableConfig();
+        String path = ymBaseUrl + "/department/department/getDepartments.do ";
+//        Map<String, String> params = new HashMap<>();
+        params.put("regionCode", Config.regionCode);
+        params.put("isOpen", "1");
+        params.put("vaccineCode", Config.vaccineCode);
+        params.put("sortType", "1");
+        params.put("customId", Config.customId);
+        String json = get(path, params, null);
+        return JSONObject.parseArray(json).toJavaList(VaccineList.class);
     }
 
     /**
@@ -68,13 +85,13 @@ public class HttpService {
     public List<VaccineList> getVaccineList() throws BusinessException, IOException {
         hasAvailableConfig();
         String path = baseUrl+"/seckill/seckill/list.do";
-        Map<String, String> param = new HashMap<>();
+//        Map<String, String> param = new HashMap<>();
         //九价疫苗的code
-        param.put("offset", "0");
-        param.put("limit", "100");
+        params.put("offset", "0");
+        params.put("limit", "100");
         //这个应该是成都的行政区划前四位
-        param.put("regionCode", Config.regionCode);
-        String json = get(path, param, null);
+        params.put("regionCode", Config.regionCode);
+        String json = get(path, params, null);
         return JSONObject.parseArray(json).toJavaList(VaccineList.class);
     }
 

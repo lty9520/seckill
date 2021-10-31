@@ -40,7 +40,7 @@ public class Config {
     /**
      * 选择的地区代码
      */
-    public static String regionCode = "5101";
+    public static String regionCode = "1101";
     /**
      * 调用接口时返回的set-cookie
      */
@@ -56,5 +56,15 @@ public class Config {
      * 加密参数st
      */
     public static String st;
+
+    /**
+     * 约苗九价代码
+     */
+    public static String vaccineCode = "8803";
+
+    /**
+     * 约苗苗码
+     */
+    public static String customId = "3";
 
 }
